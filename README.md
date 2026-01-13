@@ -25,7 +25,7 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 **Author Dashboard**
 
 * Personal content summary
-* Drafts, reviews, and published content
+* create,Drafts, reviews
 * Performance overview (views, top articles)
 * Scheduled posts & feedback
 
