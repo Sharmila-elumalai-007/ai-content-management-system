@@ -76,7 +76,7 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 
 ### Login
 
-![Login](screenshots/Login.PNG)
+![Login](Screenshots/Login.PNG)
 
 ### Admin Dashboard
 
