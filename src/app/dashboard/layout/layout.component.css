@@ -1,0 +1,11 @@
+/* Custom styles for the active router link */
+a.active {
+  background-color: #e0f2fe; /* Tailwind's sky-100 */
+  color: #0284c7; /* Tailwind's sky-600 */
+  font-weight: 600;
+}
+
+.dark a.active {
+  background-color: #334155; /* Tailwind's slate-700 */
+  color: #7dd3fc; /* Tailwind's sky-300 */
+}

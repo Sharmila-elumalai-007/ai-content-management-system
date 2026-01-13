@@ -1,0 +1,33 @@
+/* This ensures that Tailwind's prose plugin styles are applied correctly within the component. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styling for the previewed content for better readability */
+.prose h1, .prose h2, .prose h3 {
+  @apply font-bold mb-4 text-slate-900 dark:text-white;
+}
+
+.prose h1 {
+  @apply text-4xl;
+}
+
+.prose h2 {
+  @apply text-3xl;
+}
+
+.prose h3 {
+  @apply text-2xl;
+}
+
+.prose p {
+  @apply mb-4 text-base leading-relaxed text-slate-700 dark:text-slate-300;
+}
+
+.prose strong {
+    @apply font-semibold text-slate-900 dark:text-white;
+}
+
+.prose em {
+    @apply italic;
+}

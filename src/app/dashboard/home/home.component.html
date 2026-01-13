@@ -1,0 +1,81 @@
+<div class="space-y-8">
+  <header class="bg-white dark:bg-slate-800 p-8 rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Dashboard</h2>
+    <p class="text-slate-600 dark:text-slate-400">
+      Welcome back! Here's an at-a-glance overview of the content management system.
+    </p>
+  </header>
+
+  <!-- Stat Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <ng-container *ngFor="let stat of stats; trackBy: trackByTitle">
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8" [class]="stat.color" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="stat.icon"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ stat.title }}</p>
+          <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ stat.value }}</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Additional Dashboard Widgets -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Recent Activity -->
+    <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
+       <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Recent Activity</h3>
+       <div class="flow-root">
+         <ul role="list" class="-mb-8">
+           <ng-container *ngFor="let log of recentLogs; trackBy: trackById">
+             <li>
+               <div class="relative pb-8">
+                 <ng-container *ngIf="!$last">
+                  <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-slate-200 dark:bg-slate-700" aria-hidden="true"></span>
+                 </ng-container>
+                 <div class="relative flex space-x-3">
+                   <div>
+                     <span class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-800" [class]="actionColorMap[log.action]">
+                       <!-- Icon can be dynamic based on action type in the future -->
+                       <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>
+                     </span>
+                   </div>
+                   <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                     <div>
+                       <p class="text-sm text-slate-500 dark:text-slate-400">{{ log.details }}</p>
+                     </div>
+                     <div class="text-right text-xs whitespace-nowrap text-slate-500 dark:text-slate-400">
+                       <time [dateTime]="log.timestamp">{{ log.timestamp | date:'short' }}</time>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </li>
+           </ng-container>
+         </ul>
+       </div>
+    </div>
+
+    <!-- Content By Author (Admin Only) -->
+    <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Content By Author</h3>
+        <ul role="list" class="divide-y divide-slate-200 dark:divide-slate-700">
+           <ng-container *ngFor="let stat of contentByAuthor; trackBy: trackByAuthorEmail">
+            <li class="py-3 flex justify-between items-center">
+              <div class="flex items-center space-x-3">
+                  <img class="w-8 h-8 rounded-full object-cover" src="https://i.pravatar.cc/100?u={{stat.authorEmail}}" alt="Author Avatar">
+                  <p class="text-sm font-medium text-slate-900 dark:text-white">{{ stat.authorEmail }}</p>
+              </div>
+              <p class="text-sm text-slate-500 dark:text-slate-400">{{ stat.count }} {{ stat.count === 1 ? 'article' : 'articles' }}</p>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+</div>

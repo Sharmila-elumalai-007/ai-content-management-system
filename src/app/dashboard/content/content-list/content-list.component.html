@@ -1,0 +1,185 @@
+<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
+  <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Content Management</h2>
+    <button (click)="createNewArticle()" class="px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 transition-colors shrink-0">
+      Create New Article
+    </button>
+  </div>
+
+  <!-- Filtering UI -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="md:col-span-2">
+      <label for="search" class="sr-only">Search by title</label>
+      <input id="search" type="text" placeholder="Search by title..."
+        [(ngModel)]="searchTerm"
+        class="w-full rounded-md border-slate-300 dark:border-slate-600 shadow-sm sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-200 focus:border-sky-500 focus:ring-sky-500">
+    </div>
+    <div>
+      <label for="status" class="sr-only">Filter by status</label>
+      <select id="status" [(ngModel)]="statusFilter"
+        class="w-full rounded-md border-slate-300 dark:border-slate-600 shadow-sm sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-200 focus:border-sky-500 focus:ring-sky-500">
+        <option value="">All Statuses</option>
+        <ng-container *ngFor="let status of contentStatuses; track status">
+          <option [value]="status">{{ status }}</option>
+        </ng-container>
+        <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+           <option value="TRASH">Trash</option>
+        </ng-container>
+      </select>
+    </div>
+  </div>
+
+  <ng-container *ngIf="isLoading; else contentTable">
+    <!-- Skeleton Loader -->
+    <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+        <thead class="bg-slate-50 dark:bg-slate-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Title</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Status</th>
+            <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Author</th>
+            </ng-container>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Last Updated</th>
+            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+          <ng-container *ngFor="let item of _ of [1,2,3,4,5]; track $index">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.25rem" width="80%"></app-skeleton-loader></td>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.5rem" width="100px"></app-skeleton-loader></td>
+              <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+                <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.25rem" width="150px"></app-skeleton-loader></td>
+              </ng-container>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.25rem" width="120px"></app-skeleton-loader></td>
+              <td class="px-6 py-4 whitespace-nowrap text-right"><app-skeleton-loader height="1.25rem" width="80px"></app-skeleton-loader></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <ng-template #contentTable>
+    <!-- Actual Content Table -->
+    <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+        <thead class="bg-slate-50 dark:bg-slate-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+               <button (click)="changeSort('title')" class="flex items-center gap-1 group">
+                Title
+                <span class="opacity-20 group-hover:opacity-100 transition-opacity">
+                  {{ sortColumn === 'title' ? (sortDirection === 'asc' ? '▲' : '▼') : '▲' }}
+                </span>
+              </button>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Status</th>
+            <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+                <button (click)="changeSort('authorEmail')" class="flex items-center gap-1 group">
+                  Author
+                  <span class="opacity-20 group-hover:opacity-100 transition-opacity">
+                    {{ sortColumn === 'authorEmail' ? (sortDirection === 'asc' ? '▲' : '▼') : '▲' }}
+                  </span>
+                </button>
+              </th>
+            </ng-container>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+               <button (click)="changeSort('updatedAt')" class="flex items-center gap-1 group">
+                Last Updated
+                 <span class="opacity-20 group-hover:opacity-100 transition-opacity">
+                  {{ sortColumn === 'updatedAt' ? (sortDirection === 'asc' ? '▲' : '▼') : '▲' }}
+                </span>
+              </button>
+            </th>
+            <th scope="col" class="relative px-6 py-3">
+              <span class="sr-only">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+          <ng-container *ngIf="paginatedContent.length > 0">
+              <tr *ngFor="let item of paginatedContent; track item.id">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-slate-900 dark:text-white">{{ item.title }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <ng-container *ngIf="statusFilter === 'TRASH'; else statusNormal">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-300">
+                      IN TRASH
+                    </span>
+                  </ng-container>
+                  <ng-template #statusNormal>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [class]="statusColorMap[item.status]">
+                      {{ item.status }}
+                    </span>
+                  </ng-template>
+                </td>
+                <ng-container *ngIf="currentUser?.role === Role.ADMIN">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{{ item.authorEmail }}</td>
+                </ng-container>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{{ (item.deletedAt || item.updatedAt) | date: 'medium' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                  <ng-container *ngIf="currentUser?.role === Role.ADMIN; else authorActions">
+                    <ng-container *ngIf="statusFilter === 'TRASH'; else normalActions">
+                      <button (click)="restoreArticle(item)" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-200">Restore</button>
+                      <button (click)="openPermanentDeleteModal(item)" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">Delete Permanently</button>
+                    </ng-container>
+                    <ng-template #normalActions>
+                      <button (click)="openSummaryModal(item)" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-200">Summarize</button>
+                      <button (click)="openDeleteModal(item)" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">Trash</button>
+                      <button (click)="editArticle(item.id)" class="text-sky-600 hover:text-sky-900 dark:text-sky-400 dark:hover:text-sky-200">Edit</button>
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #authorActions>
+                     <button (click)="editArticle(item.id)" class="text-sky-600 hover:text-sky-900 dark:text-sky-400 dark:hover:text-sky-200">Edit</button>
+                  </ng-template>
+                </td>
+              </tr>
+          </ng-container>
+          <ng-template #noContent>
+            <tr>
+              <td [attr.colspan]="currentUser?.role === Role.ADMIN ? 5 : 4" class="px-6 py-12 text-center">
+                <p class="text-sm text-slate-500 dark:text-slate-400">No content found for the selected filters.</p>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <ng-container *ngIf="filteredContent.length > pageSize">
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalItems]="filteredContent.length"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </ng-container>
+  </ng-template>
+</div>
+
+<!-- Summary Modal -->
+<ng-container *ngIf="isSummaryModalOpen">
+  <!-- ... modal content ... -->
+</ng-container>
+
+<!-- Soft Delete Confirmation Modal -->
+<ng-container *ngIf="isDeleteModalOpen && contentToAction; as content">
+  <app-confirmation-modal
+    title="Move to Trash"
+    (confirm)="onDeleteConfirmed($event)">
+    Are you sure you want to move the article "{{ content.title }}" to the trash?
+  </app-confirmation-modal>
+</ng-container>
+
+<!-- Permanent Delete Confirmation Modal -->
+<ng-container *ngIf="isPermanentDeleteModalOpen && contentToAction; as content">
+  <app-confirmation-modal
+    title="Delete Article Permanently"
+    (confirm)="onPermanentDeleteConfirmed($event)">
+    Are you sure you want to permanently delete the article "{{ content.title }}"? This action cannot be undone.
+  </app-confirmation-modal>
+</ng-container>

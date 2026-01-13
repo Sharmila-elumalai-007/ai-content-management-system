@@ -1,0 +1,119 @@
+<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
+  <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+    <div>
+      <h2 class="text-3xl font-bold text-slate-900 dark:text-white">User Management</h2>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Invite new users and manage their roles.</p>
+    </div>
+    <button (click)="openInviteUserModal()" class="px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 transition-colors shrink-0">
+      Invite User
+    </button>
+  </div>
+
+  <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+      <thead class="bg-slate-50 dark:bg-slate-700">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">User</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Role</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Status</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+        <ng-container *ngFor="let user of paginatedUsers; trackBy: trackByFn">
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                   <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/100?u={{user.email}}" alt="">
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-slate-900 dark:text-white">{{ user.email }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <select [ngModel]="user.role" (change)="onRoleChange(user, $event)" [disabled]="user.email === currentUser()?.email"
+                class="rounded-md border-slate-300 dark:border-slate-600 shadow-sm sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-200 focus:border-sky-500 focus:ring-sky-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                <option *ngFor="let role of roles; trackBy: trackByFn" [value]="role">{{ role }}</option>
+              </select>
+               <ng-container *ngIf="user.email === currentUser()?.email">
+                <span class="ml-2 text-xs text-slate-400 dark:text-slate-500">(You)</span>
+              </ng-container>
+            </td>
+             <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [class]="statusColorMap[user.status]">
+                {{ user.status }}
+              </span>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Pagination Controls -->
+  <ng-container *ngIf="allUsers.length > pageSize">
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalItems]="allUsers.length"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </ng-container>
+</div>
+
+<!-- Invite User Modal -->
+<ng-container *ngIf="isInviteUserModalOpen">
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" (click)="closeInviteUserModal()">
+    <div class="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-lg shadow-xl" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between p-4 border-b dark:border-slate-700">
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Invite New User</h3>
+        <button type="button" (click)="closeInviteUserModal()" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-slate-600 dark:hover:text-white">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+      <form [formGroup]="inviteUserForm" (ngSubmit)="onInviteUser()">
+        <div class="p-6 space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+            <input type="email" id="email" formControlName="email"
+              class="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-600 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-200">
+            <ng-container *ngIf="inviteUserForm.get('email')?.invalid && inviteUserForm.get('email')?.touched">
+              <p class="mt-1 text-xs text-red-500 dark:text-red-400">Please enter a valid email address.</p>
+            </ng-container>
+          </div>
+          <div>
+            <label for="role" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Role</label>
+            <select id="role" formControlName="role"
+              class="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-600 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-200">
+              <option *ngFor="let role of roles; trackBy: trackByFn" [value]="role">{{ role }}</option>
+            </select>
+          </div>
+          <ng-container *ngIf="invitationError()">
+            <div class="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
+              <p class="text-sm font-medium text-red-700 dark:text-red-300">{{ invitationError }}</p>
+            </div>
+          </ng-container>
+        </div>
+        <div class="flex items-center justify-end p-4 space-x-2 border-t dark:border-slate-700">
+          <button type="button" (click)="closeInviteUserModal()" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 focus:ring-4 focus:outline-none focus:ring-sky-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700 dark:focus:ring-sky-800">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="inviteUserForm.invalid || isSubmitting"
+            class="group relative flex justify-center rounded-md border border-transparent bg-sky-600 py-2 px-4 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:bg-sky-400 disabled:cursor-not-allowed transition-colors dark:focus:ring-offset-slate-800">
+            <ng-container *ngIf="isSubmitting">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sending Invite...
+            </ng-container>
+            <ng-container *ngIf="!isSubmitting">
+              Send Invitation
+            </ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-container>

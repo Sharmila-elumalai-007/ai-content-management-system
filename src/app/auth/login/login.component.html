@@ -1,0 +1,64 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-100 dark:bg-slate-900 px-4">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <h1 class="text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+        Sign in to your account
+      </h1>
+      <p class="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
+        AI-Assisted Content Management System
+      </p>
+    </div>
+    <form class="mt-8 space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="email-address" class="sr-only">Email address</label>
+          <input id="email-address" formControlName="email" name="email" type="email" autocomplete="email" required
+            class="relative block w-full appearance-none rounded-t-md border border-slate-300 dark:border-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:z-10 focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm bg-slate-50 dark:bg-slate-800"
+            placeholder="Email address">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" formControlName="password" name="password" type="password" autocomplete="current-password"
+            required
+            class="relative block w-full appearance-none rounded-b-md border border-slate-300 dark:border-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:z-10 focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm bg-slate-50 dark:bg-slate-800"
+            placeholder="Password (any password will work)">
+        </div>
+      </div>
+
+       <div class="flex items-center justify-between">
+        <div class="text-sm">
+          <a routerLink="/forgot-password" class="font-medium text-sky-600 hover:text-sky-500">
+            Forgot your password?
+          </a>
+        </div>
+      </div>
+
+      <div class="text-xs text-slate-500 dark:text-slate-400 text-center">
+        <p>Use <strong class="font-medium text-slate-700 dark:text-slate-300">admin@test.com</strong> for ADMIN role.</p>
+        <p>Use <strong class="font-medium text-slate-700 dark:text-slate-300">author@test.com</strong> for AUTHOR role.</p>
+      </div>
+      
+      <ng-container *ngIf="loginError$ | async">
+        <div class="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
+          <p class="text-sm font-medium text-red-700 dark:text-red-300">{{ loginError$ | async }}</p>
+        </div>
+      </ng-container>
+
+      <div>
+        <button type="submit" [disabled]="loginForm.invalid || (isLoading$ | async)"
+          class="group relative flex w-full justify-center rounded-md border border-transparent bg-sky-600 py-2 px-4 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:bg-sky-400 disabled:cursor-not-allowed transition-colors dark:focus:ring-offset-slate-900">
+          <ng-container *ngIf="isLoading$ | async; else signIn">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </ng-container>
+          <ng-template #signIn>
+            Sign in
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

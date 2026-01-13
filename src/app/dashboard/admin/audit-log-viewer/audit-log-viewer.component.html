@@ -1,0 +1,72 @@
+<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
+  <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Audit Logs</h3>
+  <ng-container *ngIf="isLoading$ | async; else auditTable">
+    <!-- Skeleton loader for audit logs -->
+    <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+        <thead class="bg-slate-50 dark:bg-slate-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Timestamp</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Action</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Details</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+          <ng-container *ngFor="let item of _ of [1,2,3,4,5,6,7]; track $index">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.25rem" width="150px"></app-skeleton-loader></td>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.5rem" width="120px"></app-skeleton-loader></td>
+              <td class="px-6 py-4 whitespace-nowrap"><app-skeleton-loader height="1.25rem" width="85%"></app-skeleton-loader></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <ng-template #auditTable>
+    <!-- Actual audit log table -->
+    <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+      <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+        <thead class="bg-slate-50 dark:bg-slate-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Timestamp</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Action</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Details</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+          <ng-container *ngIf="paginatedLogs().length > 0; else noLogs">
+            <ng-container *ngFor="let log of paginatedLogs(); track log.id">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{{ log.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [class]="actionColorMap[log.action]">
+                    {{ formatAction(log.action) }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-normal text-sm text-slate-800 dark:text-slate-200">{{ log.details }}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+          <ng-template #noLogs>
+            <tr>
+              <td colspan="3" class="px-6 py-12 text-center">
+                <p class="text-sm text-slate-500 dark:text-slate-400">No audit logs found.</p>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+    
+     <!-- Pagination Controls -->
+    <ng-container *ngIf="totalLogs() > pageSize">
+      <app-pagination
+        [currentPage]="currentPage$ | async"
+        [totalItems]="totalLogs()"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </ng-container>
+  </ng-template>
+</div>

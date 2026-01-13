@@ -1,0 +1,128 @@
+<div class="flex h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+  <!-- Sidebar -->
+  <aside class="flex flex-col w-64 bg-white dark:bg-slate-800 shadow-lg transition-all duration-300" [class.w-20]="!isSidebarOpen">
+    <div class="flex items-center justify-center h-16 border-b dark:border-slate-700 shrink-0">
+      <h1 class="text-2xl font-bold text-sky-600 dark:text-sky-400" [class.hidden]="!isSidebarOpen">CMS</h1>
+      <h1 class="text-2xl font-bold text-sky-600 dark:text-sky-400" [class.hidden]="isSidebarOpen">AI</h1>
+    </div>
+    
+    <div class="p-4">
+       <a routerLink="/content/new" class="flex items-center justify-center w-full px-4 py-2 bg-sky-600 text-white font-semibold rounded-lg shadow-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 transition-colors">
+         <svg class="w-5 h-5" [class.mr-2]="isSidebarOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+         <span [class.hidden]="!isSidebarOpen">New Article</span>
+       </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="flex-grow px-2 py-2 space-y-2">
+      <p class="px-4 text-xs font-semibold tracking-wider text-slate-400 uppercase" [class.hidden]="!isSidebarOpen">
+        Main
+      </p>
+      
+      <a routerLink="/home" routerLinkActive="active" #rlaHome="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+        class="relative flex items-center px-4 py-2 mt-2 text-slate-600 rounded-lg dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+        <span class="absolute inset-y-0 left-0 w-1 bg-sky-600 rounded-tr-lg rounded-br-lg" [class.hidden]="!rlaHome.isActive"></span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="ml-3" [class.hidden]="!isSidebarOpen">Home</span>
+      </a>
+
+      <a routerLink="/content" routerLinkActive="active" #rlaContent="routerLinkActive"
+        class="relative flex items-center px-4 py-2 mt-2 text-slate-600 rounded-lg dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+        <span class="absolute inset-y-0 left-0 w-1 bg-sky-600 rounded-tr-lg rounded-br-lg" [class.hidden]="!rlaContent.isActive"></span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <span class="ml-3" [class.hidden]="!isSidebarOpen">Content</span>
+      </a>
+      
+      <ng-container *ngIf="authService.userRole === Role.ADMIN">
+        <div class="pt-4 mt-4 space-y-2 border-t border-slate-200 dark:border-slate-700">
+           <p class="px-4 text-xs font-semibold tracking-wider text-slate-400 uppercase" [class.hidden]="!isSidebarOpen">
+              Administration
+           </p>
+          <a routerLink="/admin" routerLinkActive="active" #rlaAdmin="routerLinkActive"
+            class="relative flex items-center px-4 py-2 mt-2 text-slate-600 rounded-lg dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+            <span class="absolute inset-y-0 left-0 w-1 bg-sky-600 rounded-tr-lg rounded-br-lg" [class.hidden]="!rlaAdmin.isActive"></span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span class="ml-3" [class.hidden]="!isSidebarOpen">Audit Logs</span>
+          </a>
+           <a routerLink="/users" routerLinkActive="active" #rlaUsers="routerLinkActive"
+            class="relative flex items-center px-4 py-2 mt-2 text-slate-600 rounded-lg dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+            <span class="absolute inset-y-0 left-0 w-1 bg-sky-600 rounded-tr-lg rounded-br-lg" [class.hidden]="!rlaUsers.isActive"></span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 006-6v-1a3 3 0 00-3-3H9a3 3 0 00-3 3v1a6 6 0 006 6z"></path></svg>
+            <span class="ml-3" [class.hidden]="!isSidebarOpen">Users</span>
+          </a>
+        </div>
+      </ng-container>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="flex flex-col flex-1 relative">
+    <header class="flex items-center justify-between h-16 bg-white dark:bg-slate-800 shadow-md px-4 sm:px-6 border-b dark:border-slate-700 shrink-0">
+      <button (click)="toggleSidebar()" class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      
+      <!-- Header Actions -->
+      <div class="flex items-center space-x-4">
+        <button (click)="darkModeService.toggle()" title="Toggle Dark Mode" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400">
+           <ng-container *ngIf="darkModeService.isDarkMode; else darkModeIcon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+           </ng-container>
+           <ng-template #darkModeIcon>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+           </ng-template>
+        </button>
+        
+        <!-- Notifications -->
+        <div class="relative">
+          <button (click)="toggleNotifications()" title="Notifications" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          </button>
+          <ng-container *ngIf="isNotificationsOpen">
+            <div class="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-lg shadow-xl overflow-hidden ring-1 ring-black ring-opacity-5 z-20">
+              <div class="p-4 font-semibold border-b border-slate-200 dark:border-slate-700">Notifications</div>
+              <div class="divide-y divide-slate-200 dark:divide-slate-700">
+                <ng-container *ngFor="let notification of notifications; trackBy: trackByMessage">
+                  <a href="#" class="flex items-start p-4 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <div class="flex-shrink-0">
+                      <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="notification.icon"></path></svg>
+                    </div>
+                    <div class="ml-3 w-0 flex-1">
+                      <p class="text-sm text-slate-700 dark:text-slate-300">{{ notification.message }}</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ notification.time }}</p>
+                    </div>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        
+        <!-- User Menu -->
+        <div class="relative">
+          <ng-container *ngIf="authService.currentUser; as user">
+            <button (click)="toggleUserMenu()" class="flex items-center space-x-2">
+              <img class="w-9 h-9 rounded-full object-cover ring-2 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900 ring-sky-500" src="https://i.pravatar.cc/100?u={{user.email}}" alt="User Avatar">
+            </button>
+          </ng-container>
+          <ng-container *ngIf="isUserMenuOpen && authService.currentUser; as user">
+            <div class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-xl overflow-hidden ring-1 ring-black ring-opacity-5 z-20">
+              <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
+                <p class="text-sm">Signed in as</p>
+                <p class="text-sm font-medium text-slate-900 dark:text-white truncate">{{ user.email }}</p>
+              </div>
+              <div class="py-1">
+                <a routerLink="/profile" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Your Profile</a>
+                 <button (click)="logout()" class="w-full text-left block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Sign out</button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </header>
+    <main class="flex-1 p-6 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+    <app-toast></app-toast>
+  </div>
+</div>

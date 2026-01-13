@@ -1,0 +1,66 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-100 dark:bg-slate-900 px-4">
+  <div class="w-full max-w-md space-y-8">
+    <ng-container *ngIf="(isTokenValid$ | async) && (user$ | async); as user">
+      <div>
+        <h1 class="text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Complete Your Registration
+        </h1>
+        <p class="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
+          Welcome, {{ user.email }}! Set your password to get started.
+        </p>
+      </div>
+      <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" formControlName="password" name="password" type="password" required
+              class="relative block w-full appearance-none rounded-t-md border border-slate-300 dark:border-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:z-10 focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm bg-slate-50 dark:bg-slate-800"
+              placeholder="Password (min. 8 characters)">
+          </div>
+          <div>
+            <label for="confirm-password" class="sr-only">Confirm Password</label>
+            <input id="confirm-password" formControlName="confirmPassword" name="confirmPassword" type="password"
+              required
+              class="relative block w-full appearance-none rounded-b-md border border-slate-300 dark:border-slate-700 px-3 py-2 text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:z-10 focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm bg-slate-50 dark:bg-slate-800"
+              placeholder="Confirm Password">
+          </div>
+        </div>
+
+        <ng-container *ngIf="registerForm.get('password')?.hasError('minlength')">
+          <p class="mt-1 text-xs text-red-500 dark:text-red-400">Password must be at least 8 characters long.</p>
+        </ng-container>
+        <ng-container *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
+          <p class="mt-1 text-xs text-red-500 dark:text-red-400">Passwords do not match.</p>
+        </ng-container>
+
+        <div>
+          <button type="submit" [disabled]="registerForm.invalid || (isLoading$ | async)"
+            class="group relative flex w-full justify-center rounded-md border border-transparent bg-sky-600 py-2 px-4 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:bg-sky-400 disabled:cursor-not-allowed transition-colors dark:focus:ring-offset-slate-900">
+            <ng-container *ngIf="isLoading$ | async; else completeReg">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Registering...
+            </ng-container>
+            <ng-template #completeReg>
+              Complete Registration
+            </ng-template>
+          </button>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container *ngIf="!((isTokenValid$ | async) && (user$ | async))">
+      <div class="text-center space-y-4">
+         <svg class="mx-auto h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Invalid Invitation Link</h1>
+        <p class="text-slate-600 dark:text-slate-400">This registration link is either invalid or has expired. Please contact an administrator to request a new invitation.</p>
+        <a routerLink="/login" class="inline-block text-sm font-medium text-sky-600 hover:text-sky-500">
+          &larr; Back to Login
+        </a>
+      </div>
+    </ng-container>
+  </div>
+</div>

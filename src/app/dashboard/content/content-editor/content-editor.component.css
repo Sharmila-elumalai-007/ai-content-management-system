@@ -1,0 +1,5 @@
+
+/* Ensures the modal backdrop is on top of other content */
+.fixed.inset-0.z-50 {
+  z-index: 50;
+}
