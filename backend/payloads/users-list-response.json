@@ -1,0 +1,18 @@
+
+[
+  {
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role": "ADMIN"
+  },
+  {
+    "name": "Author User",
+    "email": "author@example.com",
+    "role": "AUTHOR"
+  },
+  {
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "role": "AUTHOR"
+  }
+]

@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": 1,
+    "title": "Getting Started with Angular Signals",
+    "body": "Angular Signals provide a new way to manage state in your applications. This article explores the basics...",
+    "status": "PUBLISHED",
+    "author": "Admin User",
+    "authorEmail": "admin@example.com",
+    "createdAt": "2023-10-26T00:00:00.000Z",
+    "updatedAt": "2023-10-27T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "The Power of Tailwind CSS",
+    "body": "Tailwind CSS is a utility-first framework that helps you build custom designs without leaving your HTML.",
+    "status": "DRAFT",
+    "author": "Author User",
+    "authorEmail": "author@example.com",
+    "createdAt": "2023-11-01T00:00:00.000Z",
+    "updatedAt": "2023-11-02T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Enterprise AI Integration Patterns",
+    "body": "When integrating AI into enterprise systems, responsible AI practices are paramount. This article discusses several key patterns for safe and effective AI usage.",
+    "status": "IN_REVIEW",
+    "author": "Author User",
+    "authorEmail": "author@example.com",
+    "createdAt": "2023-11-05T00:00:00.000Z",
+    "updatedAt": "2023-11-06T00:00:00.000Z"
+  }
+]

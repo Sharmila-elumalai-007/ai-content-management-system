@@ -1,0 +1,9 @@
+
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFkbWluIFVzZXIiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNTE2MjM5MDIyfQ.fake_jwt_token_string",
+  "user": {
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role": "ADMIN"
+  }
+}

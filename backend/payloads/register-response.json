@@ -1,0 +1,7 @@
+
+{
+  "_comment": "This file is a placeholder and is not used in the application. User registration is handled exclusively by administrators through the admin panel.",
+  "name": "New Author",
+  "email": "new.author@example.com",
+  "role": "AUTHOR"
+}
