@@ -7,13 +7,13 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 
 ## 🚀 Key Features
 
-### 🔐 Authentication & Role-Based Access
+###  Authentication & Role-Based Access
 
 * Login screen with role selection (Admin / Author)
 * Role-based dashboards and navigation
 * Secure UI separation for admin and author workflows
 
-### 📊 Dashboards
+###  Dashboards
 
 **Admin Dashboard**
 
@@ -29,14 +29,14 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 * Performance overview (views, top articles)
 * Scheduled posts & feedback
 
-### 📝 Content Management
+###  Content Management
 
 * Create, edit, delete articles
 * Content lifecycle: Draft → In Review → Published / Rejected / Scheduled
 * Search, filter, and pagination
 * Separate views for Admin and Author
 
-### 🤖 AI Assistant (UI Integration)
+###  AI Assistant (UI Integration)
 
 * AI-powered assistance panel for:
 
@@ -47,13 +47,13 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
   * Image ideas
 * Integrated directly into the article creation screen
 
-### 🧾 Audit Logs (Admin)
+###  Audit Logs (Admin)
 
 * Chronological activity tracking
 * User actions (create, update, publish, reject)
 * Filterable audit history
 
-### 🎨 UI & UX
+###  UI & UX
 
 * Modern dark-themed dashboard UI
 * Responsive layouts
@@ -62,7 +62,7 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 * **Framework:** Angular
 * **Language:** TypeScript
@@ -72,7 +72,7 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 ### Login
 
@@ -121,12 +121,12 @@ The application focuses on clean UI/UX, modular architecture, and real-world CMS
 
 ## 📌 Project Status
 
-✅ Frontend completed
-🚧 Backend integration & deployment in progress
+✅ Frontend completed,
+   Backend integration & deployment in progress
 
 ---
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 * Backend integration with REST APIs
 * Authentication & authorization (JWT)
